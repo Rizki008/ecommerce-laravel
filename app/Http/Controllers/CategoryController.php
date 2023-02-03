@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -44,7 +45,30 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required',
+            'deskripsi' => 'required',
+            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->errors(), 422
+            ]);
+        }
+
+        $input = $request->all();
+
+        if ($request->has('gambar')) {
+            $gambar = $request->file('gambar');
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        }
+
+
+        $category = Category::create($input);
 
         return response()->json([
             'data' => $category
