@@ -146,6 +146,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        File::delete('uploads/' . $category->gambar);
         $category->delete();
 
         return response()->json([
