@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class SubcategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'index']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,11 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories = Subcategory::all();
+
+        return response()->json([
+            'data' => $subcategories
+        ]);
     }
 
     /**
@@ -35,7 +46,34 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_kategori' => 'required',
+            'nama_subkategori' => 'required',
+            'deskripsi' => 'required',
+            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->errors(), 422
+            ]);
+        }
+
+        $input = $request->all();
+
+        if ($request->has('gambar')) {
+            $gambar = $request->file('gambar');
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        }
+
+
+        $category = Subcategory::create($input);
+
+        return response()->json([
+            'data' => $category
+        ]);
     }
 
     /**
@@ -69,7 +107,36 @@ class SubcategoryController extends Controller
      */
     public function update(Request $request, Subcategory $subcategory)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_kategori' => 'required',
+            'nama_subkategori' => 'required',
+            'deskripsi' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->errors(), 422
+            ]);
+        }
+
+        $input = $request->all();
+
+        if ($request->has('gambar')) {
+            File::delete('uploads/' . $subcategory->gambar);
+            $gambar = $request->file('gambar');
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        } else {
+            unset($input['gambar']);
+        }
+
+        $subcategory->update($input);
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $subcategory
+        ]);
     }
 
     /**
@@ -80,6 +147,11 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
-        //
+        File::delete('uploads/' . $subcategory->gambar);
+        $subcategory->delete();
+
+        return response()->json([
+            'message' => 'Success'
+        ]);
     }
 }
