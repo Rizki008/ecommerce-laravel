@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubcategoryController;
@@ -23,6 +24,7 @@ route::group([
         'categories' => CategoryController::class,
         'subcategories' => SubcategoryController::class,
         'slider' => SliderController::class,
-        'product' => ProductController::class
+        'product' => ProductController::class,
+        'members' => MemberController::class,
     ]);
 });
