@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\TestimoniController;
@@ -27,6 +28,7 @@ route::group([
         'slider' => SliderController::class,
         'product' => ProductController::class,
         'members' => MemberController::class,
-        'testimonis' => TestimoniController::class
+        'testimonis' => TestimoniController::class,
+        'reviews' => ReviewController::class
     ]);
 });
