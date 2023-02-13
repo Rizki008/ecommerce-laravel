@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        return view('auth.login');
+    }
     public function login()
     {
         $credentials = request(['email', 'password']);
@@ -75,41 +80,11 @@ class AuthController extends Controller
             ]);
         }
 
-        // $email = $request->email;
-        // $password = $request->password;
-
-        // $credentials = $request->only('email', 'password');
-
-        // dd($credentials);
-
-        // $member = Member::where('email', $request->email)->first();
-        // if ($member) {
-
-        //     if (Hash::check($request->password, $member->password)) {
-        //         $request->session()->regenerate();
-        //         return response()->json([
-        //             'message' => 'Success',
-        //             'data' => $member
-        //         ]);
-        //     } else {
-        //         return response()->json([
-        //             'message' => 'Success',
-        //             'data' => 'Password Salah'
-        //         ]);
-        //     }
-        // } else {
-        //     return response()->json([
-        //         'message' => 'Success',
-        //         'data' => 'Email Salah'
-        //     ]);
-        // }
         $member = Member::where('email', $request->email)->first();
-        // if (Auth::attempt($credentials)) {
+
         if ($member) {
-            // dd('member di temukan');
             if (Hash::check($request->password, $member->password)) {
                 $request->session()->regenerate();
-                // $member = Member::where('email', $request->email)->first();
                 return response()->json([
                     'message' => 'Success',
                     'data' => $member
