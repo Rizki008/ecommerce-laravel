@@ -41,19 +41,35 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <strong>Gagal</strong>
+                                            <p>{{ $errors->first() }}</p>
+                                        </div>
+                                    @endif
+
+                                    <form class="user" method="POST" action="/login">
+                                        @csrf
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Enter Email Address..." name="email">
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
+
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="exampleInputPassword" placeholder="Password" name="password">
+                                            @error('password')
+                                                <span class="text-danger"> {{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
 
                                     </form>
                                 </div>
