@@ -16,15 +16,31 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    public function login()
+    public function login(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
         $credentials = request(['email', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json('Email or Password is worng', 401);
+        if (auth()->attempt($credentials)) {
+            $token = Auth::guard('api')->attempt($credentials);
+            // dd($token);
+            cookie()->queue(cookie('token', $token, 60));
+            return redirect('/dashboard');
         }
 
-        return $this->respondWithToken($token);
+        return back()->withErrors([
+            'error' => 'Email atau Password Salah'
+        ]);
+        // $credentials = request(['email', 'password']);
+
+        // if (!$token = auth()->attempt($credentials)) {
+        //     return response()->json('Email or Password is worng', 401);
+        // }
+
+        // return $this->respondWithToken($token);
     }
 
     protected function respondWithToken($token)
@@ -105,14 +121,16 @@ class AuthController extends Controller
 
     public function logout()
     {
-        auth()->logout();
-        return response()->json(['message' => 'Successfully logged out']);
+        Session::flush();
+        return redirect('/login');
+        // auth()->logout();
+        // return response()->json(['message' => 'Successfully logged out']);
     }
 
     public function logout_member()
     {
-        Session::flash();
+        Session::flush();
 
-        redirect('/login');
+        redirect('/login_member');
     }
 }
