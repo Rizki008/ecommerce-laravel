@@ -129,6 +129,7 @@
                             alert(data.message);
                         }
                         setCookie('token', data.token, 7)
+                        // localStorage.setItem('token', data.token);
                         window.location.href = '/dashboard';
                     }
                 });
