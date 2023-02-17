@@ -59,13 +59,13 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/kategori">Kategori</a>
-                        <a class="collapse-item" href="/subkategori">Sub Kategori</a>
+                        <a class="collapse-item" href="/kategori">Data Kategori</a>
+                        <a class="collapse-item" href="/subkategori">Data Sub Kategori</a>
                         <a class="collapse-item" href="/slider">Data Slider</a>
                         <a class="collapse-item" href="/barang">Data Barang</a>
                         <a class="collapse-item" href="/member">Data Member</a>
                         <a class="collapse-item" href="/testimoni">Data Testimoni</a>
-                        <a class="collapse-item" href="/rewviews">Data Reviews</a>
+                        <a class="collapse-item" href="/reviews">Data Reviews</a>
                     </div>
                 </div>
             </li>
@@ -146,7 +146,9 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                    <h1 class="h3 mb-4 text-gray-800">@yield('title')</h1>
+
+                    @yield('content')
 
                 </div>
                 <!-- /.container-fluid -->
@@ -185,6 +187,23 @@
     <!-- Custom scripts for all pages-->
     <script src="/sbadmin2/js/sb-admin-2.min.js"></script>
 
+    <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+    @stack('js')
 </body>
 
 </html>
